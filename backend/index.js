@@ -1,6 +1,7 @@
 const express = require("express")
 
 const {generateFille} = require("./generateFile");
+const {executeCpp} = require("./executeCpp");
 
 const app = express();
 
@@ -18,9 +19,17 @@ app.post("/run", async (req, res) => {
         return res.status(400).json({success: false, error: "emptyt code!"});
     }
 
-    const filepath = await generateFille(language, code)
+    try{
+        const filepath = await generateFille(language, code)
 
-    return res.json({filepath})
+        const output = await executeCpp(filepath);
+    
+        return res.json({filepath, output})
+    } catch (err) {
+        res.status(500).json({err})
+    }
+
+
 }) 
 
 app.listen(5000, () => {
