@@ -5,6 +5,7 @@ import './App.css';
 function App() {
 
   const [code, setCode] = useState("");
+  const [output, setOutput] = useState("");
 
   const handleSbmit = async () => {
 
@@ -12,9 +13,13 @@ function App() {
       language: "cpp",
       code
     };
+    try{
+      const {data} = await axios.post("http://localhost:5000/run", payLoad)
+      setOutput(data.output)
+    } catch (err){
+      console.log(err.response);
+    }
 
-    const output = await axios.post("http://localhost:5000/run", payLoad)
-    console.log(code);
   }
 
   return (
@@ -28,7 +33,7 @@ function App() {
       ></textarea>
       <br />
       <button onClick={handleSbmit}>Submit</button>
-
+      <p>{output}</p>
     </div>
   );
 }
