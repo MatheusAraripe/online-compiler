@@ -1,3 +1,4 @@
+import axios from axios
 import { useState } from 'react';
 import './App.css';
 
@@ -5,7 +6,14 @@ function App() {
 
   const [code, setCode] = useState("");
 
-  const handleSbmit = () => {
+  const handleSbmit = async () => {
+
+    const payLoad = {
+      language: "cpp",
+      code
+    };
+
+    const output = await axios.post("http://localhost:5000/run", payLoad)
     console.log(code);
   }
 
